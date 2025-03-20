@@ -28,7 +28,7 @@
 - **PostgreSQL** (for the database)
 - **Git** (for cloning the repository)
 
-###.env
+.env
 DB_NAME=crmconnect
 DB_USER=your_postgres_user
 DB_PASS=your_postgres_password
