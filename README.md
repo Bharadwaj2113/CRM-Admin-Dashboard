@@ -1,7 +1,5 @@
 # CRM-Admin-Dashboard
 
-# CRM-Admin-Dashboard
-
 **CRM-Admin-Dashboard** is a web application designed to help businesses manage their customer relationships efficiently. It provides a centralized platform for admins to track customer details, record interactions, generate personalized recommendations, send emails, and analyze customer engagement.
 
 ## Features
