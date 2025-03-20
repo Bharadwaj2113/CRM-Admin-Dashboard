@@ -28,15 +28,7 @@
 - **PostgreSQL** (for the database)
 - **Git** (for cloning the repository)
 
-### Installation Steps
-
-1. **Clone the Repository**:
-   ```bash
-   git clone https://github.com/your-username/CRM-Admin-Dashboard.git
-   cd CRM-Admin-Dashboard
-
-
-.env
+###.env
 DB_NAME=crmconnect
 DB_USER=your_postgres_user
 DB_PASS=your_postgres_password
@@ -45,3 +37,13 @@ GOOGLE_API_KEY=your_google_api_key
 SECRET_KEY=your_secret_key
 EMAIL_SENDER=your_email@example.com
 EMAIL_PASSWORD=your_email_password
+
+### Installation Steps
+
+1. **Clone the Repository**:
+   ```bash
+   git clone https://github.com/your-username/CRM-Admin-Dashboard.git
+   cd CRM-Admin-Dashboard
+
+
+
