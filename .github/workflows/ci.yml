@@ -1,4 +1,4 @@
-name: CI Pipeline for SmartCRM
+name: CI/CD Pipeline for CRM-Admin-Dashboard
 
 on:
   push:
@@ -7,18 +7,26 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build-test:
+  build-test-deploy:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      # FRONTEND CI
+      # Frontend CI
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'  # ✅ Update node version since your dependencies want >=18
+          node-version: '18'
+
+      - name: Cache Node.js modules
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('frontend/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
 
       - name: Install and Build Frontend
         working-directory: ./frontend
@@ -26,18 +34,21 @@ jobs:
           npm install
           npm run build
         env:
-          CI: false  # ✅ Prevent React from treating warnings as errors
+          CI: false
 
-      - name: Run Frontend Tests
-        working-directory: ./frontend
-        run: |
-          npm test -- --watchAll=false || true  # ✅ Optional: Don’t fail on missing test setup
-
-      # BACKEND CI
+      # Backend CI
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.9'
+
+      - name: Cache Python dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('backend/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
 
       - name: Install Backend Dependencies
         working-directory: ./backend
@@ -45,7 +56,15 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Run Backend Tests (if any)
+      - name: Run Backend Tests
         working-directory: ./backend
         run: |
-          echo "✅ No backend tests implemented yet"
+          pytest || echo "No tests implemented yet"
+
+      # Frontend CD to GitHub Pages
+      - name: Deploy Frontend to GitHub Pages
+        if: github.ref == 'refs/heads/main'
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./frontend/build
