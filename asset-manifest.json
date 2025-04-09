@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/CRM-Admin-Dashboard/static/css/main.625c1ca5.css",
+    "main.js": "/CRM-Admin-Dashboard/static/js/main.419c36d4.js",
+    "index.html": "/CRM-Admin-Dashboard/index.html",
+    "main.625c1ca5.css.map": "/CRM-Admin-Dashboard/static/css/main.625c1ca5.css.map",
+    "main.419c36d4.js.map": "/CRM-Admin-Dashboard/static/js/main.419c36d4.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.625c1ca5.css",
+    "static/js/main.419c36d4.js"
+  ]
+}
