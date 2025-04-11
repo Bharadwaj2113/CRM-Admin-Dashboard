@@ -60,11 +60,12 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+          pip install pytest  # Explicitly install pytest
 
       - name: Run Backend Tests
         working-directory: ./backend
         run: |
-          pytest
+          pytest -s
 
       # Frontend CD to GitHub Pages
       - name: Deploy Frontend to GitHub Pages
