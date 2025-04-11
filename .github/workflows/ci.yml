@@ -36,11 +36,16 @@ jobs:
         env:
           CI: false
 
+      - name: Run Frontend Tests
+        working-directory: ./frontend
+        run: |
+          npm test -- --watchAll=false
+
       # Backend CI
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.9'
+          python-version: '3.12'
 
       - name: Cache Python dependencies
         uses: actions/cache@v3
@@ -51,15 +56,16 @@ jobs:
             ${{ runner.os }}-pip-
 
       - name: Install Backend Dependencies
-        working-directory: ./backend  # Fixed from ./frontend
+        working-directory: ./backend
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+          pip install psycopg2-binary pytest flask bcrypt pyjwt python-dotenv
 
       - name: Run Backend Tests
         working-directory: ./backend
         run: |
-          pytest || echo "No tests implemented yet"
+          pytest -s
 
       # Frontend CD to GitHub Pages
       - name: Deploy Frontend to GitHub Pages
@@ -68,3 +74,17 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./frontend/build
+
+      # Backend CD to Heroku
+      - name: Deploy Backend to Heroku
+        if: github.ref == 'refs/heads/main'
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        run: |
+          pip install heroku3
+          echo "machine api.heroku.com
+            login ${{ secrets.HEROKU_EMAIL }}
+            password ${{ secrets.HEROKU_API_KEY }}" > ~/.netrc
+          cd backend
+          heroku git:remote -a crm-admin-backend  # Replace with your Heroku app name
+          git subtree push --prefix backend heroku main
